@@ -1,0 +1,16 @@
+#!/bin/sh
+
+#xrandr --dpi 96 # use this for normal screens
+xrandr --dpi 192 # use this value for my Dell laptop
+
+# uncomment this to use the Xresources colors/settings.
+#xrdb ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources & xrdbpid=$!
+
+autostart="mpd xcompmgr pipewire"
+
+for program in $autostart; do
+	pidof -s "$program" || "$program" &
+done >/dev/null 2>&1
+
+# ensure that xrdb has finished running before moving on to start the WM.
+[ -n "$xrdbpid" ] && wait "$xrdbpid"
